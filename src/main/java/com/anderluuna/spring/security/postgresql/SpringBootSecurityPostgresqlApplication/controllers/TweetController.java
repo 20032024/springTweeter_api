@@ -28,40 +28,45 @@ import org.springframework.data.domain.Pageable;
 
 public class TweetController {
 
+   @Autowired
+   private TweetRepository tweetRepository;
+
+
+ @GetMapping("/all")
+   public Page<Tweet> getTweet(Pageable pageable) {
+       return tweetRepository.findAll(pageable);
+   }
+ @PostMapping("/create")
+ public Tweet createTweet(@Valid @RequestBody Tweet tweet) {
+
+       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+       String userId = authentication.getName();
+       System.out.println("userid : " + userId  );
+
+
+       User user = getValidUser(userId);
+       System.out.println("user");
+
+       System.out.println(user);
+       Tweet myTweet = new Tweet(tweet.getTweet());
+       myTweet.setPostedBy(user);
+       tweetRepository.save(myTweet);
+
+       return myTweet;
+ }
+
+
     @Autowired
-    private TweetRepository tweetRepository;
-    @Autowired
-    private UserRepository userRepository;
-
-  @GetMapping("/all")
-    public Page<Tweet> getTweet(Pageable pageable) {
-        return tweetRepository.findAll(pageable);
-    }
-  
-  @PostMapping("/create")
-  public Tweet createTweet(@Valid @RequestBody Tweet tweet) {
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userId = authentication.getName();
-        System.out.println("userid : " + userId  );
+   private UserRepository userRepository;
 
 
-        User user = getValidUser(userId);
-        System.out.println("user");
+   private User getValidUser(String userId) {
+       Optional<User> userOpt = userRepository.findByUsername(userId);
+       if (!userOpt.isPresent()) {
+           throw new RuntimeException("User not found");
+       }
+       return userOpt.get();
+   }
 
-        System.out.println(user);
-        Tweet myTweet = new Tweet(tweet.getTweet());
-        myTweet.setPostedBy(user);
-        tweetRepository.save(myTweet);
-
-        return myTweet;
-  }
-
-    private User getValidUser(String userId) {
-        Optional<User> userOpt = userRepository.findByUsername(userId);
-        if (!userOpt.isPresent()) {
-            throw new RuntimeException("User not found");
-        }
-        return userOpt.get();
-    }
 }
+

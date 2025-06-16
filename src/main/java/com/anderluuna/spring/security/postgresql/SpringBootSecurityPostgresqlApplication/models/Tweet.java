@@ -26,23 +26,14 @@ public class Tweet {
   private User postedBy;
 
 
+    // Constructor sin parámetros
+    public Tweet() {
+    }
 
-  public User getPostedBy() {
-    return postedBy;
-  }
-
-  public void setPostedBy(User postedBy) {
-    this.postedBy = postedBy;
-  }
-
-  public Tweet() {
-  }
-
-  public  Tweet (String tweet) {
-    this.tweet = tweet;
-  }
-
-  // getters and setters
+    // Constructor con parámetros (si es necesario)
+    public Tweet(String tweet) {
+        this.tweet = tweet;
+    }
 
   public Long getId() {
     return id;
@@ -52,27 +43,19 @@ public class Tweet {
     this.id = id;
   }
 
-
   public String getTweet() {
     return tweet;
-}
-
+  }
 
   public void setTweet(String tweet) {
     this.tweet = tweet;
   }
 
-  @OneToMany(mappedBy = "tweet")
-  Set<TweetReaction> likes;
-
-  public Set<TweetReaction> getLikes() {
-    return likes;
+  public User getPostedBy() {
+    return postedBy;
   }
 
-  public void setLikes(Set<TweetReaction> likes) {
-    this.likes = likes;
+  public void setPostedBy(User postedBy) {
+    this.postedBy = postedBy;
   }
-
-
-
 }

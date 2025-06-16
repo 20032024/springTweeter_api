@@ -9,4 +9,6 @@ import com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlApp
 @Repository
 public interface TweetRepository extends JpaRepository<Tweet, Long> {
 
+    
+
 }

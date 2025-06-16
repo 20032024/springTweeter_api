@@ -84,10 +84,10 @@ public class TweetReactionController {
         myTweetReaction.setReaction(myReaction);
         
         System.out.println("tweet reaction : "   );
-        System.out.println( myTweetReaction.getReactionId());
-                System.out.println( myTweetReaction.getTweetId());
+        System.out.println( myTweetReaction.getId());
+                System.out.println( myTweetReaction.getTweet());
 
-                        System.out.println( myTweetReaction.getUserId());
+                        System.out.println( myTweetReaction.getUser());
 
 
         tweetReactionRepository.save(myTweetReaction);

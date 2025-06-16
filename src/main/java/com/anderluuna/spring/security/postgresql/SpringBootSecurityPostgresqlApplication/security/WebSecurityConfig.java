@@ -68,15 +68,20 @@ public class WebSecurityConfig  {
          auth.requestMatchers("/api/auth/**").permitAll()
              .requestMatchers("/api/test/**").permitAll()
              .requestMatchers("/api/tweets/**").permitAll()
+             .requestMatchers("/api/reactions/**").permitAll()
+             .requestMatchers("/api/categories/**").permitAll()  // Solo usuarios autenticados pueden acceder a /categories
+             .requestMatchers("/api/comments/**").permitAll()
              .anyRequest().authenticated()
        );
   
    http.authenticationProvider(authenticationProvider());
 
 
+
     http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     
     return http.build();
   }
+  
 }
 

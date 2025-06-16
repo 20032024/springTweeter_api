@@ -3,10 +3,8 @@ package com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlAp
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "tweet_reactions", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"user_id", "tweet_id"})
-})
-public class TweetReaction {
+@Table(name = "postre_reactions")
+public class PostreReaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,23 +12,23 @@ public class TweetReaction {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;  // El usuario que reaccionó al tweet
+    private User user;  // El usuario que reaccionó al postre
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tweet_id", referencedColumnName = "id")
-    private Tweet tweet;  // El tweet al que se reaccionó
+    @JoinColumn(name = "postre_id", referencedColumnName = "id")
+    private Postre postre;  // El postre sobre el que se reaccionó
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reaction_id", referencedColumnName = "id")
-    private Reaction reaction;  // Tipo de reacción (like, love, etc.)
+    private Reaction reaction;  // El tipo de reacción (Ej. like, love, etc.)
 
     // Constructor vacío
-    public TweetReaction() {}
+    public PostreReaction() {}
 
     // Constructor con los parámetros
-    public TweetReaction(User user, Tweet tweet, Reaction reaction) {
+    public PostreReaction(User user, Postre postre, Reaction reaction) {
         this.user = user;
-        this.tweet = tweet;
+        this.postre = postre;
         this.reaction = reaction;
     }
 
@@ -51,12 +49,12 @@ public class TweetReaction {
         this.user = user;
     }
 
-    public Tweet getTweet() {
-        return tweet;
+    public Postre getPostre() {
+        return postre;
     }
 
-    public void setTweet(Tweet tweet) {
-        this.tweet = tweet;
+    public void setPostre(Postre postre) {
+        this.postre = postre;
     }
 
     public Reaction getReaction() {
