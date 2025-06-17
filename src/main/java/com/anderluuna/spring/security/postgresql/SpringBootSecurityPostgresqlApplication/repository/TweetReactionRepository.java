@@ -7,6 +7,6 @@ import com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlApp
 
 @Repository
 public interface TweetReactionRepository extends JpaRepository<TweetReaction, Long> {
-
+//    boolean existsByUser_IdAndTweet_Id(Long userId, Long tweetId);
 }
 

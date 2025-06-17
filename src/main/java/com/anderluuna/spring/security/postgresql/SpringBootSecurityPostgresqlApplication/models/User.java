@@ -1,4 +1,5 @@
 package com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlApplication.models;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -6,7 +7,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table( name = "users", 
@@ -14,6 +15,7 @@ import jakarta.validation.constraints.Size;
           @UniqueConstraint(columnNames = "username"),
           @UniqueConstraint(columnNames = "email") 
         })
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "roles"}) // Ignora el proxy de Hibernate y los roles
 public class User {
     
     @Id
@@ -85,7 +87,4 @@ public class User {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
-
-    
-  
 }
