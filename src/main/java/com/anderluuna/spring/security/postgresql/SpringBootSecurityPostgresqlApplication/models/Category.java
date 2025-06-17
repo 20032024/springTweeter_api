@@ -1,13 +1,13 @@
 package com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlApplication.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;  // Importar para @JsonManagedReference
+import com.fasterxml.jackson.annotation.JsonManagedReference; // Importar para @JsonManagedReference
 import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name = "categories")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Category {
 
     @Id
@@ -15,22 +15,17 @@ public class Category {
     private Long id;
 
     @Column(nullable = false, length = 50)
-    private String name;  // El nombre de la categoría (ejemplo: dulce, salado, etc.)
-
-    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY) // Relación con la entidad Postre
-    @JsonManagedReference  // Evita la recursión en el lado de Category
-    private List<Postre> postres;  // Lista de postres asociados a esta categoría
+    private String name; // El nombre de la categoría (ejemplo: dulce, salado, etc.)
 
     // Constructor vacío
-    public Category() {}
-
+    public Category() {
+    }
 
     // Constructor con parámetros si es necesario
     public Category(Long id, String name) {
         this.id = id;
         this.name = name;
     }
-
 
     // Getters y Setters
     public Long getId() {
@@ -47,13 +42,5 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public List<Postre> getPostres() {
-        return postres;
-    }
-
-    public void setPostres(List<Postre> postres) {
-        this.postres = postres;
     }
 }

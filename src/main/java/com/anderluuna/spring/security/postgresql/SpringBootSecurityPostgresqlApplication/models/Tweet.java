@@ -19,11 +19,11 @@ public class Tweet {
 
     @NotBlank
     @Size(max = 140)
-    private String tweet;  // Contenido del tweet (comentarios sobre el postre)
+    private String tweet; // Contenido del tweet (comentarios sobre el postre)
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER) // Cambiar a EAGER
     @JoinColumn(name = "posted_by", referencedColumnName = "id")
-    private User postedBy;  // Usuario que hizo la publicación
+    private User postedBy;
 
     @OneToMany(mappedBy = "tweet")
     @JsonIgnore
@@ -40,11 +40,12 @@ public class Tweet {
     private String tipoPostre;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "categoria_id")  // La columna que referencia a la categoría
-    private Category categoria;  // Relación con la categoría del tweet
+    @JoinColumn(name = "categoria_id") // La columna que referencia a la categoría
+    private Category categoria; // Relación con la categoría del tweet
 
     // Constructor vacío
-    public Tweet() {}
+    public Tweet() {
+    }
 
     // Getters y Setters
 
