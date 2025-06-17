@@ -5,9 +5,6 @@ import org.springframework.web.bind.annotation.*;
 import com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlApplication.payload.response.CategoryResponse;
 import com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlApplication.security.services.CategoryServiceImpl;
 import com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlApplication.models.Category;
-import com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlApplication.models.Postre;
-import com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlApplication.models.Tweet;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,36 +23,33 @@ public class CategoryController {
 
         // Convertir las categorías a DTOs y asignarles la URL de la imagen
         return categories.stream()
-                         .map(category -> {
-                             // Asignar una imagen estática a cada categoría según su nombre
-                             String imageUrl = "";
-                             switch (category.getName().toLowerCase()) {
-                                 case "postres de chocolate":
-                                     imageUrl = "assets/postre-chocolate.jpg";
-                                     break;
-                                 case "postres de limón":
-                                     imageUrl = "assets/postre-limon.jpg";
-                                     break;
-                                 case "postres de fresa":
-                                     imageUrl = "assets/postre-fresa.jpg";
-                                     break;
-                                 case "postres de manzana":
-                                     imageUrl = "assets/postre-manzana.jpg";
-                                     break;
-                                 default:
-                                     imageUrl = "assets/images/default-category.jpg"; // Imagen por defecto
-                                     break;
-                             }
+                .map(category -> {
+                    // Asignar una imagen estática a cada categoría según su nombre
+                    String imageUrl = "";
+                    switch (category.getName().toLowerCase()) {
+                        case "postres de chocolate":
+                            imageUrl = "assets/postre-chocolate.jpg";
+                            break;
+                        case "postres de limón":
+                            imageUrl = "assets/postre-limon.jpg";
+                            break;
+                        case "postres de fresa":
+                            imageUrl = "assets/postre-fresa.jpg";
+                            break;
+                        case "postres de manzana":
+                            imageUrl = "assets/postre-manzana.jpg";
+                            break;
+                        default:
+                            imageUrl = "assets/images/default-category.jpg"; // Imagen por defecto
+                            break;
+                    }
 
-                             return new CategoryResponse(
-                                 category.getId(),
-                                 category.getName(),
-                                 category.getPostres().stream()
-                                         .map(Postre::getId) // Obtener solo el ID de los postres
-                                         .collect(Collectors.toList()), // Convertir a lista de IDs
-                                 imageUrl  // Asignar la URL de la imagen
-                             );
-                         })
-                         .collect(Collectors.toList());
+                    return new CategoryResponse(
+                            category.getId(),
+                            category.getName(), // Aquí solo pasamos el nombre, no necesitamos un stream
+                            imageUrl // Asignar la URL de la imagen
+                    );
+                })
+                .collect(Collectors.toList());
     }
 }

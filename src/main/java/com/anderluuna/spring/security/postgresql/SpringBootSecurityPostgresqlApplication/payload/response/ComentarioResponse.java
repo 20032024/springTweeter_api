@@ -5,16 +5,8 @@ import java.time.LocalDateTime;
 public class ComentarioResponse {
     private Long id;
     private String contenido;
-    private UserResponse user;
+    private String user;
     private LocalDateTime fechaCreacion;
-
-    // Constructor
-    public ComentarioResponse(Long id, String contenido, UserResponse user, LocalDateTime fechaCreacion) {
-        this.id = id;
-        this.contenido = contenido;
-        this.user = user;
-        this.fechaCreacion = fechaCreacion;
-    }
 
     public Long getId() {
         return id;
@@ -32,11 +24,11 @@ public class ComentarioResponse {
         this.contenido = contenido;
     }
 
-    public UserResponse getUser() {
+    public String getUser() {
         return user;
     }
 
-    public void setUser(UserResponse user) {
+    public void setUser(String user) {
         this.user = user;
     }
 
@@ -47,7 +39,5 @@ public class ComentarioResponse {
     public void setFechaCreacion(LocalDateTime fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
     }
-
-    // Getters y Setters
 
 }
