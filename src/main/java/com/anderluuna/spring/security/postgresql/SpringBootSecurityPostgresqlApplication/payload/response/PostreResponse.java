@@ -3,19 +3,17 @@ package com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlAp
 public class PostreResponse {
 
     private Long id;
-    private String name;  // Nombre del postre
-    private String description;  // Descripción del postre
-    private Long categoryId;  // ID de la categoría
+    private String nombre;
+    private CategoryResponse categoria;
 
     // Constructor
-    public PostreResponse(Long id, String name, String description, Long categoryId) {
+    public PostreResponse(Long id, String nombre, CategoryResponse categoria) {
         this.id = id;
-        this.name = name;
-        this.description = description;
-        this.categoryId = categoryId;
+        this.nombre = nombre;
+        this.categoria = categoria;
     }
 
-    // Getters y setters
+    // Getters y Setters
     public Long getId() {
         return id;
     }
@@ -24,27 +22,21 @@ public class PostreResponse {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
-    public String getDescription() {
-        return description;
+    public CategoryResponse getCategoria() {
+        return categoria;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setCategoria(CategoryResponse categoria) {
+        this.categoria = categoria;
     }
 
-    public Long getCategoryId() {
-        return categoryId;
-    }
 
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
-    }
 }

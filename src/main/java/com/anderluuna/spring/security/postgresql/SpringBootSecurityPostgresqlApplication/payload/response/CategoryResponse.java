@@ -7,7 +7,7 @@ public class CategoryResponse {
     private Long id;
     private String name;
     private List<Long> postreIds;  // Lista de IDs de postres asociados a la categoría
-    private String imageUrl;  // URL de la imagen asociada
+    private String imageUrl;  // URL de la imagen asociada a la categoría
 
     // Constructor
     public CategoryResponse(Long id, String name, List<Long> postreIds, String imageUrl) {

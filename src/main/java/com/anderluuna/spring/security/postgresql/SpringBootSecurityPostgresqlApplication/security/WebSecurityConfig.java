@@ -34,8 +34,8 @@ public class WebSecurityConfig  {
   @Autowired
   private AuthEntryPointJwt unauthorizedHandler;
 
-  @Bean
-  public AuthTokenFilter authenticationJwtTokenFilter() {
+    @Bean
+    AuthTokenFilter authenticationJwtTokenFilter() {
     return new AuthTokenFilter();
   }
 
@@ -59,29 +59,27 @@ public class WebSecurityConfig  {
     return new BCryptPasswordEncoder();
   }
   
-  @Bean
- public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-   http.csrf(csrf -> csrf.disable())
-       .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
-       .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-       .authorizeHttpRequests(auth ->
-         auth.requestMatchers("/api/auth/**").permitAll()
-             .requestMatchers("/api/test/**").permitAll()
-             .requestMatchers("/api/tweets/**").permitAll()
-             .requestMatchers("/api/reactions/**").permitAll()
-             .requestMatchers("/api/categories/**").permitAll()  // Solo usuarios autenticados pueden acceder a /categories
-             .requestMatchers("/api/comments/**").permitAll()
-             .anyRequest().authenticated()
-       );
-  
-   http.authenticationProvider(authenticationProvider());
+@Bean
+public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    http.csrf(csrf -> csrf.disable())
+        .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
+        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .authorizeHttpRequests(auth ->
+            auth.requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/test/**").permitAll()
+                .requestMatchers("/api/tweets/**").permitAll()
+                .requestMatchers("/api/reactions/**").permitAll()
+                .requestMatchers("/api/categories/**").permitAll()
+                .requestMatchers("/api/comments/**").permitAll()
+                .requestMatchers("/api/postres/**").permitAll()
+                .anyRequest().authenticated()
+        );
 
-
-
+    http.authenticationProvider(authenticationProvider());
     http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-    
+
     return http.build();
-  }
+}
   
 }
 

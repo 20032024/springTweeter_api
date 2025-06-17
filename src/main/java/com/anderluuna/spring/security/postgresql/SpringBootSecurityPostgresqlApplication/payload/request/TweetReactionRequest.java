@@ -4,6 +4,8 @@ import jakarta.validation.constraints.NotBlank;
 
 public class TweetReactionRequest {
   private Long tweetId;
+
+  
   public Long getTweetId() {
     return tweetId;
 }

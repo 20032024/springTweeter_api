@@ -19,6 +19,7 @@ import com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlApp
 import com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlApplication.models.TweetReaction;
 import com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlApplication.models.User;
 import com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlApplication.payload.request.TweetReactionRequest;
+import com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlApplication.payload.response.TweetReactionResponse;
 import com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlApplication.models.Reaction;
 
 import com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlApplication.repository.UserRepository;
@@ -45,13 +46,28 @@ public class TweetReactionController {
     private ReactionRepository reactionRepository;
 
 
-  @GetMapping("/all")
-    public Page<TweetReaction> getTweet(Pageable pageable) {
-        return tweetReactionRepository.findAll(pageable);
-    }
-  
+@GetMapping("/all")
+public Page<TweetReactionResponse> getTweet(Pageable pageable) {
+    // Obtener todas las reacciones de tweet (entidades)
+    Page<TweetReaction> reactions = tweetReactionRepository.findAll(pageable);
+
+    // Convertir cada TweetReaction en un TweetReactionResponse
+    Page<TweetReactionResponse> reactionsResponse = reactions.map(reaction -> {
+        return new TweetReactionResponse(
+            reaction.getId(),               // ID de la reacción
+            reaction.getTweet().getId(),     // ID del tweet
+            reaction.getUser().getId(),      // ID del usuario
+            reaction.getReaction().getId()   // ID de la reacción
+        );
+    });
+
+    // Retornar la lista de respuestas
+    return reactionsResponse;
+}
   @PostMapping("/create")
+ 
   public TweetReaction createReaction(@Valid @RequestBody TweetReactionRequest tweetReaction) {
+    
         System.out.println("tweetid : " + tweetReaction.getTweetId()  );
         System.out.println("reactiontid : " + tweetReaction.getReactionId()  );
 

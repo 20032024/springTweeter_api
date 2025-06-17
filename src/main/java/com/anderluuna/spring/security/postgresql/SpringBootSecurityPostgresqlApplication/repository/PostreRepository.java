@@ -1,13 +1,9 @@
 package com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlApplication.repository;
 
-import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
 import com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlApplication.models.Postre;
+import java.util.Optional;
 
 public interface PostreRepository extends JpaRepository<Postre, Long> {
-    List<Postre> findByNameContaining(String name);
-    List<Postre> findByCategoryId(Long categoryId);
+    Optional<Postre> findByName(String name);  // Cambié esto a Optional<Postre>
 }

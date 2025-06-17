@@ -1,11 +1,14 @@
 package com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlApplication.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "tweet_reactions", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"user_id", "tweet_id"})
 })
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class TweetReaction {
 
     @Id
@@ -16,7 +19,7 @@ public class TweetReaction {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;  // El usuario que reaccionó al tweet
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "tweet_id", referencedColumnName = "id")
     private Tweet tweet;  // El tweet al que se reaccionó
 

@@ -6,6 +6,7 @@ import com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlApp
 import com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlApplication.security.services.CategoryServiceImpl;
 import com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlApplication.models.Category;
 import com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlApplication.models.Postre;
+import com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlApplication.models.Tweet;
 
 import java.util.List;
 import java.util.stream.Collectors;

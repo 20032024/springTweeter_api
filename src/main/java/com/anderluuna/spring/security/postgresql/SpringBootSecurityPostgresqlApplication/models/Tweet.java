@@ -1,61 +1,114 @@
 package com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlApplication.models;
-import java.util.HashSet;
-import java.util.Set;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-@Entity
-@Table( name = "tweets")
+import java.util.HashSet;
+import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+@Entity
+@Table(name = "tweets")
 public class Tweet {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
+    @NotBlank
+    @Size(max = 140)
+    private String tweet;  // Contenido del tweet (comentarios sobre el postre)
 
-  @NotBlank
-  @Size(max = 140)
-  private String tweet;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "posted_by", referencedColumnName = "id")
+    private User postedBy;  // Usuario que hizo la publicación
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "posted_by", referencedColumnName = "id")
-  private User postedBy;
+    @OneToMany(mappedBy = "tweet")
+    @JsonIgnore
+    private Set<TweetReaction> likes = new HashSet<>();
 
+    // Nuevos campos
+    @Size(max = 500)
+    private String ingredientes;
 
-    // Constructor sin parámetros
-    public Tweet() {
+    @Size(max = 50)
+    private String namePostre;
+
+    @Size(max = 50)
+    private String tipoPostre;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "categoria_id")  // La columna que referencia a la categoría
+    private Category categoria;  // Relación con la categoría del tweet
+
+    // Constructor vacío
+    public Tweet() {}
+
+    // Getters y Setters
+
+    public Long getId() {
+        return id;
     }
 
-    // Constructor con parámetros (si es necesario)
-    public Tweet(String tweet) {
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTweet() {
+        return tweet;
+    }
+
+    public void setTweet(String tweet) {
         this.tweet = tweet;
     }
 
-  public Long getId() {
-    return id;
-  }
+    public User getPostedBy() {
+        return postedBy;
+    }
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+    public void setPostedBy(User postedBy) {
+        this.postedBy = postedBy;
+    }
 
-  public String getTweet() {
-    return tweet;
-  }
+    public Set<TweetReaction> getLikes() {
+        return likes;
+    }
 
-  public void setTweet(String tweet) {
-    this.tweet = tweet;
-  }
+    public void setLikes(Set<TweetReaction> likes) {
+        this.likes = likes;
+    }
 
-  public User getPostedBy() {
-    return postedBy;
-  }
+    public String getIngredientes() {
+        return ingredientes;
+    }
 
-  public void setPostedBy(User postedBy) {
-    this.postedBy = postedBy;
-  }
+    public void setIngredientes(String ingredientes) {
+        this.ingredientes = ingredientes;
+    }
+
+    public String getNamePostre() {
+        return namePostre;
+    }
+
+    public void setNamePostre(String namePostre) {
+        this.namePostre = namePostre;
+    }
+
+    public String getTipoPostre() {
+        return tipoPostre;
+    }
+
+    public void setTipoPostre(String tipoPostre) {
+        this.tipoPostre = tipoPostre;
+    }
+
+    public Category getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Category categoria) {
+        this.categoria = categoria;
+    }
 }

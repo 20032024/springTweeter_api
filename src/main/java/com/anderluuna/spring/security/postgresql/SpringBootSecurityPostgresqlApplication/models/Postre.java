@@ -1,8 +1,7 @@
 package com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlApplication.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;  // Importar para @JsonBackReference
 import jakarta.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "postres")
@@ -12,35 +11,21 @@ public class Postre {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 100)
-    private String name;  // Nombre del postre (ej. "Pastel de Chocolate")
-
-    @Column(nullable = false, length = 500)
-    private String description;  // Descripción del postre (ej. "Un delicioso pastel de chocolate...")
+    @Column(nullable = false)
+    private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", referencedColumnName = "id")
-    private Category category;  // Relacionado con la categoría del postre
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "posted_by", referencedColumnName = "id")
-    private User postedBy;  // El usuario que publicó el postre
-
-    @OneToMany(mappedBy = "postre", cascade = CascadeType.ALL)
-    private Set<PostreReaction> reactions = new HashSet<>();  // Reacciones (likes, love, etc.)
-
-    @OneToMany(mappedBy = "postre", cascade = CascadeType.ALL)
-    private Set<PostreComment> comments = new HashSet<>();  // Comentarios sobre el postre
+    @JoinColumn(name = "category_id")
+    @JsonBackReference  // Evita la recursión en el lado de Postre
+    private Category category;  // Relación con la categoría
 
     // Constructor vacío
     public Postre() {}
 
     // Constructor con parámetros
-    public Postre(String name, String description, Category category, User postedBy) {
+    public Postre(String name, Category category) {
         this.name = name;
-        this.description = description;
         this.category = category;
-        this.postedBy = postedBy;
     }
 
     // Getters y Setters
@@ -60,43 +45,11 @@ public class Postre {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public Category getCategory() {
         return category;
     }
 
     public void setCategory(Category category) {
         this.category = category;
-    }
-
-    public User getPostedBy() {
-        return postedBy;
-    }
-
-    public void setPostedBy(User postedBy) {
-        this.postedBy = postedBy;
-    }
-
-    public Set<PostreReaction> getReactions() {
-        return reactions;
-    }
-
-    public void setReactions(Set<PostreReaction> reactions) {
-        this.reactions = reactions;
-    }
-
-    public Set<PostreComment> getComments() {
-        return comments;
-    }
-
-    public void setComments(Set<PostreComment> comments) {
-        this.comments = comments;
     }
 }

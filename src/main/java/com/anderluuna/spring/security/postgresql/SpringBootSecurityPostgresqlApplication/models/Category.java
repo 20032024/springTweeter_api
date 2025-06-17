@@ -1,34 +1,36 @@
 package com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlApplication.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;  // Importar para @JsonManagedReference
 import jakarta.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "categories")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 100)
-    private String name;  // Nombre de la categoría (Ej. "Dulces", "Frutales", etc.)
+    @Column(nullable = false, length = 50)
+    private String name;  // El nombre de la categoría (ejemplo: dulce, salado, etc.)
 
-    @Column(nullable = true, length = 255)
-    private String imageUrl;  // URL de la imagen asociada a la categoría
-
-    @OneToMany(mappedBy = "category")
-    private Set<Postre> postres = new HashSet<>();  // Relación con los postres que pertenecen a esta categoría
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY) // Relación con la entidad Postre
+    @JsonManagedReference  // Evita la recursión en el lado de Category
+    private List<Postre> postres;  // Lista de postres asociados a esta categoría
 
     // Constructor vacío
     public Category() {}
 
-    // Constructor con el nombre de la categoría y la URL de la imagen
-    public Category(String name, String imageUrl) {
+
+    // Constructor con parámetros si es necesario
+    public Category(Long id, String name) {
+        this.id = id;
         this.name = name;
-        this.imageUrl = imageUrl;
     }
+
 
     // Getters y Setters
     public Long getId() {
@@ -47,19 +49,11 @@ public class Category {
         this.name = name;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public Set<Postre> getPostres() {
+    public List<Postre> getPostres() {
         return postres;
     }
 
-    public void setPostres(Set<Postre> postres) {
+    public void setPostres(List<Postre> postres) {
         this.postres = postres;
     }
 }
