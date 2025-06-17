@@ -28,7 +28,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker image
-        run: docker build -t anderluuna/springTweet_api:latest .
+        run: docker build -t anderluuna/springtweet_api:latest .
 
       - name: Push Docker image
-        run: docker push anderluuna/springTweet_api:latest
+        run: docker push anderluuna/springtweet_api:latest
