@@ -19,36 +19,33 @@ import com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlApp
 import com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlApplication.security.jwt.AuthTokenFilter;
 import com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlApplication.security.services.UserDetailsServiceImpl;
 
-
-
-    
 @Configuration
 @EnableMethodSecurity
 // (securedEnabled = true,
 // jsr250Enabled = true,
 // prePostEnabled = true) // by default
-public class WebSecurityConfig  {
+public class WebSecurityConfig {
   @Autowired
   UserDetailsServiceImpl userDetailsService;
 
   @Autowired
   private AuthEntryPointJwt unauthorizedHandler;
 
-    @Bean
-    AuthTokenFilter authenticationJwtTokenFilter() {
+  @Bean
+  AuthTokenFilter authenticationJwtTokenFilter() {
     return new AuthTokenFilter();
   }
 
   @Bean
   public DaoAuthenticationProvider authenticationProvider() {
-      DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-       
-      authProvider.setUserDetailsService(userDetailsService);
-      authProvider.setPasswordEncoder(passwordEncoder());
-   
-      return authProvider;
+    DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+
+    authProvider.setUserDetailsService(userDetailsService);
+    authProvider.setPasswordEncoder(passwordEncoder());
+
+    return authProvider;
   }
- 
+
   @Bean
   public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
     return authConfig.getAuthenticationManager();
@@ -58,28 +55,26 @@ public class WebSecurityConfig  {
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
-  
-@Bean
-public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+  @Bean
+  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.csrf(csrf -> csrf.disable())
         .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .authorizeHttpRequests(auth ->
-            auth.requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/api/test/**").permitAll()
-                .requestMatchers("/api/tweets/**").permitAll()
-                .requestMatchers("/api/reactions/**").permitAll()
-                .requestMatchers("/api/categories/**").permitAll()
-                .requestMatchers("/api/comments/**").permitAll()
-                .requestMatchers("/api/postres/**").permitAll()
-                .anyRequest().authenticated()
-        );
+        .authorizeHttpRequests(auth -> auth.requestMatchers("/api/auth/**").permitAll()
+            .requestMatchers("/api/test/**").permitAll()
+            .requestMatchers("/api/tweets/**").permitAll()
+            .requestMatchers("/api/reactions/**").permitAll()
+            .requestMatchers("/api/categories/**").permitAll()
+            .requestMatchers("/api/comments/**").permitAll()
+            .requestMatchers("/api/comments/create").authenticated() // ✅ necesita token
+            .requestMatchers("/api/postres/**").permitAll()
+            .anyRequest().authenticated());
 
     http.authenticationProvider(authenticationProvider());
     http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
     return http.build();
-}
-  
-}
+  }
 
+}

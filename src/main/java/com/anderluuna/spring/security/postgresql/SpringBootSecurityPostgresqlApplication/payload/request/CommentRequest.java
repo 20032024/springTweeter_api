@@ -3,11 +3,18 @@ package com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlAp
 import jakarta.validation.constraints.NotBlank;
 
 public class CommentRequest {
+    private Long tweetId;
+    private String content;
+    // private Long userId; se obtiene por el token
 
-    @NotBlank
-    private String content;  // Contenido del comentario
+    public Long getTweetId() {
+        return tweetId;
+    }
 
-    // Getters y Setters
+    public void setTweetId(Long tweetId) {
+        this.tweetId = tweetId;
+    }
+
     public String getContent() {
         return content;
     }

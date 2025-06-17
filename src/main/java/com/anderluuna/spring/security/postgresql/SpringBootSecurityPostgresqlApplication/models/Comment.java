@@ -15,22 +15,22 @@ public class Comment {
 
     @NotBlank
     @Column(length = 500)
-    private String content;  // El contenido del comentario
+    private String content; // El contenido del comentario
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER) // Cambiar a EAGER para cargar inmediatamente
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;  // El usuario que hizo el comentario
+    private User user; // El usuario que hizo el comentario
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER) // Cambiar a EAGER
     @JoinColumn(name = "tweet_id", referencedColumnName = "id")
-    private Tweet tweet;  // El tweet al que pertenece el comentario
-
+    private Tweet tweet;
 
     @Column(nullable = false)
-    private LocalDateTime fechaCreacion = LocalDateTime.now();  // La fecha en que se creó el comentario
+    private LocalDateTime fechaCreacion = LocalDateTime.now(); // La fecha en que se creó el comentario
 
     // Constructor vacío
-    public Comment() {}
+    public Comment() {
+    }
 
     // Constructor con parámetros
     public Comment(String content, User user, Tweet tweet) {
