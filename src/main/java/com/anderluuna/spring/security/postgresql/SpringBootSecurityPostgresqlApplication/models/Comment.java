@@ -20,7 +20,7 @@ public class Comment {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER) // Cambia a EAGER
     @JoinColumn(name = "tweet_id", nullable = false)
     private Tweet tweet;
 

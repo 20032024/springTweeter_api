@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 @Entity
 @Table(name = "tweets")
@@ -40,9 +40,10 @@ public class Tweet {
     @Size(max = 50)
     private String tipoPostre;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "categoria_id") // La columna que referencia a la categoría
-    private Category categoria; // Relación con la categoría del tweet
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "category_id")
+    @JsonInclude(JsonInclude.Include.NON_NULL) // Para asegurar que los valores nulos no sean incluidos
+    private Category categoria;
 
     // Constructor vacío
     public Tweet() {
