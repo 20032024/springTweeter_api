@@ -52,11 +52,6 @@ public class CommentController {
     @GetMapping("/tweet/{tweetId}")
     public List<Comment> getCommentsByTweetId(@PathVariable Long tweetId,
             @RequestHeader("Authorization") String token) {
-        // Si es necesario, validar el token manualmente aquí o se puede obtener del
-        // contexto de seguridad
-        System.out.println("Token recibido: " + token); // Solo para pruebas
-
-        // Tu código para obtener los comentarios
         return commentRepository.findByTweetId(tweetId);
     }
 
