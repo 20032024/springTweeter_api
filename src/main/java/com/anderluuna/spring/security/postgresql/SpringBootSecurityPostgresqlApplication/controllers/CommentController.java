@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -49,7 +50,13 @@ public class CommentController {
     }
 
     @GetMapping("/tweet/{tweetId}")
-    public List<Comment> getCommentsByTweetId(@PathVariable Long tweetId) {
+    public List<Comment> getCommentsByTweetId(@PathVariable Long tweetId,
+            @RequestHeader("Authorization") String token) {
+        // Si es necesario, validar el token manualmente aquí o se puede obtener del
+        // contexto de seguridad
+        System.out.println("Token recibido: " + token); // Solo para pruebas
+
+        // Tu código para obtener los comentarios
         return commentRepository.findByTweetId(tweetId);
     }
 
