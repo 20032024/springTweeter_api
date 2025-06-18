@@ -64,6 +64,7 @@ public class WebSecurityConfig {
         .authorizeHttpRequests(auth -> auth.requestMatchers("/api/auth/**").permitAll()
             .requestMatchers("/api/test/**").permitAll()
             .requestMatchers("/api/tweets/**").permitAll()
+            .requestMatchers("/api/tweets/create").authenticated()
             .requestMatchers("/api/reactions/**").permitAll()
             .requestMatchers("/api/categories/**").permitAll()
             .requestMatchers("/api/comments/**").permitAll()

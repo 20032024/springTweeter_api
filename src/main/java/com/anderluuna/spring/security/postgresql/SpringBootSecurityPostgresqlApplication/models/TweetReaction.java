@@ -1,43 +1,52 @@
 package com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlApplication.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "tweet_reactions", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"user_id", "tweet_id"})
+        @UniqueConstraint(columnNames = { "user_id", "tweet_id" }),
+
 })
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+
 public class TweetReaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;  // El usuario que reaccionó al tweet
+    @Column(name = "reaction_id")
+    Long reactionId;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "tweet_id", referencedColumnName = "id")
-    private Tweet tweet;  // El tweet al que se reaccionó
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reaction_id", referencedColumnName = "id")
-    private Reaction reaction;  // Tipo de reacción (like, love, etc.)
-
-    // Constructor vacío
-    public TweetReaction() {}
-
-    // Constructor con los parámetros
-    public TweetReaction(User user, Tweet tweet, Reaction reaction) {
-        this.user = user;
-        this.tweet = tweet;
-        this.reaction = reaction;
+    public Long getReactionId() {
+        return reactionId;
     }
 
-    // Getters y Setters
+    public void setReactionId(Long reactionId) {
+        this.reactionId = reactionId;
+    }
+
+    @Column(name = "user_id")
+    Long userId;
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    @Column(name = "tweet_id")
+    Long tweetId;
+
+    public Long getTweetId() {
+        return tweetId;
+    }
+
+    public void setTweetId(Long tweetId) {
+        this.tweetId = tweetId;
+    }
+
     public Long getId() {
         return id;
     }
@@ -46,27 +55,46 @@ public class TweetReaction {
         this.id = id;
     }
 
+    @ManyToOne
+    @MapsId("userId")
+    @JoinColumn(name = "user_id")
+    User user;
+
     public User getUser() {
         return user;
     }
 
     public void setUser(User user) {
+        this.userId = user.getId();
         this.user = user;
     }
+
+    @ManyToOne
+    @MapsId("tweetId")
+    @JoinColumn(name = "tweet_id")
+    Tweet tweet;
 
     public Tweet getTweet() {
         return tweet;
     }
 
     public void setTweet(Tweet tweet) {
+        this.tweetId = tweet.getId();
         this.tweet = tweet;
     }
+
+    @ManyToOne
+    @MapsId("reactionId")
+    @JoinColumn(name = "reaction_id")
+    Reaction reaction;
 
     public Reaction getReaction() {
         return reaction;
     }
 
     public void setReaction(Reaction reaction) {
+        this.reactionId = reaction.getId();
         this.reaction = reaction;
     }
+
 }
