@@ -13,16 +13,15 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @Column(length = 500)
-    private String content; // El contenido del comentario
+    @Column(length = 1000, nullable = false)
+    private String content;
 
-    @ManyToOne(fetch = FetchType.EAGER) // Cambiar a EAGER para cargar inmediatamente
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user; // El usuario que hizo el comentario
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    @ManyToOne(fetch = FetchType.EAGER) // Cambiar a EAGER
-    @JoinColumn(name = "tweet_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tweet_id", nullable = false)
     private Tweet tweet;
 
     @Column(nullable = false)
@@ -30,13 +29,6 @@ public class Comment {
 
     // Constructor vacío
     public Comment() {
-    }
-
-    // Constructor con parámetros
-    public Comment(String content, User user, Tweet tweet) {
-        this.content = content;
-        this.user = user;
-        this.tweet = tweet;
     }
 
     // Getters y Setters

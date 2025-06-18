@@ -1,5 +1,6 @@
 package com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlApplication.controllers;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -21,11 +22,9 @@ import com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlApp
 import com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlApplication.models.Tweet;
 import com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlApplication.models.User;
 import com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlApplication.payload.request.CommentRequest;
-import com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlApplication.payload.response.ComentarioResponse;
 import com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlApplication.repository.CommentRepository;
 import com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlApplication.repository.TweetRepository;
 import com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlApplication.repository.UserRepository;
-import com.anderluuna.spring.security.postgresql.SpringBootSecurityPostgresqlApplication.payload.response.UserResponse;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +32,7 @@ import org.springframework.data.domain.Pageable;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/comments")
+
 public class CommentController {
     @Autowired
     private CommentRepository commentRepository;
@@ -44,65 +44,38 @@ public class CommentController {
     private TweetRepository tweetRepository;
 
     @GetMapping("/all")
-    public List<ComentarioResponse> getAllComments() {
-        List<Comment> comments = commentRepository.findAll(); // Obtener los comentarios desde la base de datos
-        List<ComentarioResponse> responses = comments.stream()
-                .map(this::mapToComentarioResponse) // Convertirlos en la forma adecuada para la respuesta
-                .collect(Collectors.toList());
-
-        return responses;
+    public Page<Comment> getTweet(Pageable pageable) {
+        return commentRepository.findAll(pageable);
     }
 
-    public ComentarioResponse mapToComentarioResponse(Comment comment) {
-        ComentarioResponse response = new ComentarioResponse();
-        response.setId(comment.getId());
-        response.setContenido(comment.getContent());
-
-        // Mapear el usuario a UserResponse
-        UserResponse userResponse = new UserResponse();
-        userResponse.setId(comment.getUser().getId());
-        userResponse.setUsername(comment.getUser().getUsername());
-        response.setUser(userResponse);
-
-        response.setFechaCreacion(comment.getFechaCreacion());
-        return response;
-    }
-
-    @GetMapping("/tweet/{tweetId}/comments")
-    public List<ComentarioResponse> getCommentsByTweetId(@PathVariable Long tweetId) {
-        // Obtener los comentarios del tweet específico
-        List<Comment> comments = commentRepository.findByTweetId(tweetId);
-
-        // Convertir los comentarios en el formato adecuado para la respuesta
-        return comments.stream()
-                .map(this::mapToComentarioResponse) // Mapear a ComentarioResponse
-                .collect(Collectors.toList());
+    @GetMapping("/tweet/{tweetId}")
+    public List<Comment> getCommentsByTweetId(@PathVariable Long tweetId) {
+        return commentRepository.findByTweetId(tweetId);
     }
 
     @PostMapping("/create")
-    public Comment createComentario(@Valid @RequestBody CommentRequest commentRequest) {
+    public Comment createComment(@Valid @RequestBody CommentRequest commentRequest) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
+        String userId = authentication.getName();
+        System.out.println("userid : " + userId);
 
-        // Obtener el usuario autenticado (este sería el que haga el comentario)
-        User user = getValidUser(username);
-        // Asegúrate de que el userId no sea nulo y que exista
-        if (commentRequest.getUserId() != null && !user.getId().equals(commentRequest.getUserId())) {
-            throw new RuntimeException("User ID does not match the authenticated user");
-        }
+        Tweet tweet = tweetRepository.findById(commentRequest.getTweetId())
+                .orElseThrow(() -> new RuntimeException("Tweet no encontrado"));
+        User user = getValidUser(userId);
+        System.out.println("user");
+        System.out.println(user);
 
-        Tweet tweet = getValidTweet(commentRequest.getTweetId());
+        Comment comment = new Comment();
+        comment.setContent(commentRequest.getContent());
+        comment.setUser(user);
+        comment.setTweet(tweet);
+        comment.setFechaCreacion(LocalDateTime.now()); // Configura la fecha en el servidor
+        commentRepository.save(comment);
 
-        Comment comentario = new Comment();
-        comentario.setContent(commentRequest.getContent());
-        comentario.setTweet(tweet);
-        comentario.setUser(user); // Aquí asignamos el usuario correcto
+        return comment;
 
-        return commentRepository.save(comentario);
     }
 
-    // Método para obtener el usuario por el username (asegúrate de que el userId es
-    // válido)
     private User getValidUser(String userId) {
         Optional<User> userOpt = userRepository.findByUsername(userId);
         if (!userOpt.isPresent()) {
@@ -111,9 +84,4 @@ public class CommentController {
         return userOpt.get();
     }
 
-    // Método para obtener el tweet por ID (asegúrate de que el tweetId es válido)
-    private Tweet getValidTweet(Long tweetId) {
-        return tweetRepository.findById(tweetId)
-                .orElseThrow(() -> new RuntimeException("Tweet not found"));
-    }
 }
