@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 public class CommentRequest {
     private Long tweetId;
     private String content;
-    // private Long userId; se obtiene por el token
+    private Long userId;
 
     public Long getTweetId() {
         return tweetId;
@@ -22,4 +22,13 @@ public class CommentRequest {
     public void setContent(String content) {
         this.content = content;
     }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
 }

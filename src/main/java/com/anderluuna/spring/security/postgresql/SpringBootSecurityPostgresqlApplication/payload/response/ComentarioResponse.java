@@ -5,9 +5,10 @@ import java.time.LocalDateTime;
 public class ComentarioResponse {
     private Long id;
     private String contenido;
-    private String user;
+    private UserResponse user; // Cambia de String a UserResponse
     private LocalDateTime fechaCreacion;
 
+    // Getters y Setters
     public Long getId() {
         return id;
     }
@@ -24,11 +25,11 @@ public class ComentarioResponse {
         this.contenido = contenido;
     }
 
-    public String getUser() {
+    public UserResponse getUser() {
         return user;
     }
 
-    public void setUser(String user) {
+    public void setUser(UserResponse user) {
         this.user = user;
     }
 
@@ -39,5 +40,4 @@ public class ComentarioResponse {
     public void setFechaCreacion(LocalDateTime fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
     }
-
 }
